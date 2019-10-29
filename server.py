@@ -1,30 +1,66 @@
-import socket
 
-class Servidor(object):
-	
-	def __init__(self):
-		self.host = ""
-		self.port = 7008
-		self.address = (self.host, self.port)
-		self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #Criar socket
-		self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		self.connection = ""
+import socket, threading
+from mysqlbancodedados import MysqlBanco
 
-	def start_server(self):
-		self.server_socket.bind(self.address)
-		self.server_socket.listen(10)
+class ClientThread(threading.Thread):
+    def __init__(self,clientAddress,clientsocket):
+        self.MYSQL = MysqlBanco()
+        threading.Thread.__init__(self)
+        self.csocket = clientsocket
+        print ("Nova conexao: ", clientAddress)
 
-		print("Loading...")
-		self.connection, cliente = self.server_socket.accept()
-		while True:
-			print("Conectado")
-			receiver = self.connection.recv(1024).decode()
-			print(receiver)
 
-			self.connection.send("Dados recebidos.".encode())
- 
-	def break_server(self):
-		self.server_socket.close()
+    def run(self):
+        print ("Conectado de: ", clientAddress)
+        msg = ''
+        data = ''
+        while True:
 
-server = Servidor()
-server.start_server()
+            data = self.csocket.recv(1024)
+            recebido = data.decode()
+            recebido = recebido.split(',')
+            print(recebido)
+            if recebido[0] == "cadastro":
+                if self.MYSQL.cadastrar_no_banco("2019",recebido[1],recebido[2],recebido[3]):
+                    self.csocket.send("ok".encode())
+                else:
+                    self.csocket.send("error".encode())
+            if recebido[0] == "login":
+                self.MYSQL.verifica_login(recebido[1],recebido[2])
+
+            if recebido[0] == "cadastroTime":
+                string_cadastro_time=""
+                string_cadastro_time+=recebido[2]+","+recebido[3]+","+recebido[4]+","+recebido[5]
+                if self.MYSQL.cadastrarTime(recebido[1],string_cadastro_time):
+                    self.csocket.send("ok".encode())
+                else:
+                    self.csocket.send("error".encode())
+
+        """
+        msg = data.decode()
+        print("REceiver: ", msg)
+        
+        lista = msg.split(',')
+
+        user= lista[0]
+        password = lista[1]
+        name = lista[1]
+        """
+
+        self.csocket.send("cad".encode())
+        
+
+        print ("Client at ", clientAddress , " disconnected...")
+if __name__ == '__main__':
+    LOCALHOST = ''
+    PORT = 7000
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind((LOCALHOST, PORT))
+    print("Servidor iniciado!")
+    print("Aguardando nova conexao..")
+    while True:
+        server.listen(1)
+        clientsock, clientAddress = server.accept()
+        newthread = ClientThread(clientAddress, clientsock)
+        newthread.start()
