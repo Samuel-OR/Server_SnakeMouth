@@ -26,12 +26,49 @@ class ClientThread(threading.Thread):
                 else:
                     self.csocket.send("error".encode())
             if recebido[0] == "login":
-                self.MYSQL.verifica_login(recebido[1],recebido[2])
+                status,usuario,times =  self.MYSQL.verifica_login(recebido[1],recebido[2])
+                if status:
+                	resposta = "okLogin,"
+                	resposta+=str(usuario[0][0])+','
+                	resposta+=str(usuario[0][1])+','
+                	resposta+=str(usuario[0][2])+','
+                	resposta+=str(usuario[0][3])+','
+                	resposta+=str(usuario[0][4])+','
+                	resposta+=str(times)
+                	
+                	print(resposta)
+                	self.csocket.send(resposta.encode())
+
+                else:
+                	self.csocket.send("error".encode())
 
             if recebido[0] == "cadastroTime":
                 string_cadastro_time=""
                 string_cadastro_time+=recebido[2]+","+recebido[3]+","+recebido[4]+","+recebido[5]
-                if self.MYSQL.cadastrarTime(recebido[1],string_cadastro_time):
+                if self.MYSQL.cadastrarTime(recebido[1],string_cadastro_time,recebido[6]): 
+                    self.csocket.send("ok".encode())
+                else:
+                    self.csocket.send("error".encode())
+
+            if recebido[0] == "buscaTime":
+                status,time = self.MYSQL.busca_time_editar(recebido[1])
+                if status:
+                    print(time)
+                    resposta = "okBuscaTime,"
+                    resposta+=str(time[0][0])+','
+                    resposta+=str(time[0][1])+','
+                    resposta+=str(time[0][2])+','
+                    resposta+=str(time[0][3])+','
+                    resposta+=str(time[0][4])+','
+                    resposta+=str(time[0][5])+','
+                    self.csocket.send(resposta.encode())
+
+            if recebido[0] == "editarTime":
+                print(recebido)
+                string_editar_time=""
+                string_editar_time+=recebido[2]+","+recebido[3]+","+recebido[4]+","+recebido[5]
+
+                if self.MYSQL.editarTime(recebido[1],string_editar_time,recebido[6]): 
                     self.csocket.send("ok".encode())
                 else:
                     self.csocket.send("error".encode())
