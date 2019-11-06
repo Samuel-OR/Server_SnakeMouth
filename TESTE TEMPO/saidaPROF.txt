@@ -1,0 +1,4 @@
+Soma =  18
+Mult =  80
+Sub =  2
+Div =  1.25
