@@ -7,7 +7,7 @@ class MysqlBanco():
 		self.host = "localhost"
 		self.banco = "pooii"
 		self.user = "root"
-		self.password = "silas"
+		self.password = "Samuel12345"
 		self.conexao = pymysql.connect(host=self.host,db=self.banco,user=self.user,passwd=self.password)
 
 	def iniciar_conexao(self):
