@@ -59,7 +59,7 @@ class ClientThread(threading.Thread):
             if recebido[0] == "buscaTime":
                 status,time = self.MYSQL.busca_time_editar(recebido[1])
                 if status:
-                    print(time)
+                    print("Busca Time: ",time)
                     resposta = "okBuscaTime,"
                     resposta+=str(time[0][0])+','
                     resposta+=str(time[0][1])+','
@@ -88,6 +88,22 @@ class ClientThread(threading.Thread):
                 else:
                     self.csocket.send("error".encode())
 
+            if recebido[0] == "listarTimes":
+                status,time = self.MYSQL.listarTimes(recebido[1])
+
+                if status:
+                    resposta = str('okListarTimes')
+                    for x in time:
+                        resposta+=';'
+                        resposta += str(x[0])+','
+                        resposta += str(x[1])+','
+                        resposta += str(x[2])+','
+                        resposta += str(x[3])+','
+                        resposta += str(x[4])+','
+                        resposta += str(x[5])
+                    
+                    print(resposta)        
+                    self.csocket.send(resposta.encode())
             
 
         """

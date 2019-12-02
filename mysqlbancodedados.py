@@ -35,11 +35,11 @@ class MysqlBanco():
 	def cadastrarTime(self,nomeTime,membros,professor):
 
 		cursor = self.conexao.cursor()
-		query = "INSERT INTO times_coders(nome_time,componentes_grupo,usuario) VALUES(%s,%s,%s)"
+		query = "INSERT INTO times_coders(nome_time,componentes_grupo,usuario, questoes_corretas) VALUES(%s,%s,%s, %s)"
 		cadastrado = False
 
 		try:
-			cursor.execute(query,(nomeTime,membros,professor))
+			cursor.execute(query,(nomeTime,membros,professor, '0'))
 			MysqlBanco.count+=1
 			self.conexao.commit()
 			print("OK, Salvo no banco de dados")
@@ -66,7 +66,6 @@ class MysqlBanco():
 			print("Erro ao salvar no banco de dados!!!!!")
 
 		return cadastrado
-
 
 	def verifica_login(self,usuario,senha):
 		cursor = self.conexao.cursor()
@@ -98,7 +97,6 @@ class MysqlBanco():
 		else:
 			return False,list(time)
 
-
 	def editarTime(self,nome,membros,id):
 		cursor = self.conexao.cursor()
 		#cursor.execute("UPDATE carros SET nome_dono = 'Joaquim' WHERE placa = 'ABC-1234'")
@@ -113,7 +111,6 @@ class MysqlBanco():
 			cadastrado = True
 		except:
 			print("Erro ao salvar no banco de dados!!!!!")
-
 
 	def editarProfessor(self,siape, nome, email, senha, id_t):
 		cursor = self.conexao.cursor()
@@ -130,3 +127,14 @@ class MysqlBanco():
 			print("Erro ao salvar no banco de dados!!!!!")
 
 		return cadastrado
+
+	def listarTimes(self, idprofessor):
+		cursor = self.conexao.cursor()
+		querySelect = "SELECT * FROM times_coders WHERE usuario=%s"
+		cursor.execute(querySelect,(idprofessor))
+		time = cursor.fetchall()
+		
+		if len(time) > 0:
+			return True,list(time)
+		else:
+			return False,list(time)
