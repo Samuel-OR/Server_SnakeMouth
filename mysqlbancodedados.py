@@ -55,15 +55,23 @@ class MysqlBanco():
 		querySelect = "SELECT * FROM professor WHERE email=%s AND senha=%s"
 		cursor.execute(querySelect,(usuario,senha))
 		users = cursor.fetchall()
+
+
+		print("OI", users)
+
 		times = False
 		if len(users) > 0:
 			querySelect = "SELECT * FROM times_coders WHERE usuario=%s"
 			cursor.execute(querySelect,(str(users[0][0])))
+			print("----------")
 			print(users)
+			print("----------")
 			print(str(users[0][0]))
 			times = cursor.fetchall()
+			print("----------")
 			print(times)
 			times = len(times)
+			print("----------")
 			print(times)
 			return True, list(users), times
 		else:

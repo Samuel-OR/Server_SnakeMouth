@@ -28,16 +28,15 @@ class ClientThread(threading.Thread):
             if recebido[0] == "login":
                 status,usuario,times =  self.MYSQL.verifica_login(recebido[1],recebido[2])
                 if status:
-                	resposta = "okLogin,"
-                	resposta+=str(usuario[0][0])+','
-                	resposta+=str(usuario[0][1])+','
-                	resposta+=str(usuario[0][2])+','
-                	resposta+=str(usuario[0][3])+','
-                	resposta+=str(usuario[0][4])+','
-                	resposta+=str(times)
-                	
-                	print(resposta)
-                	self.csocket.send(resposta.encode())
+                    resposta = "okLogin,"
+                    resposta += str(usuario[0][0])+','
+                    resposta += str(usuario[0][1])+','
+                    resposta += str(usuario[0][2])+','
+                    resposta += str(usuario[0][3])+','
+                    resposta += str(usuario[0][4])+','
+                    resposta += str(times)+','
+                    resposta += str(usuario[0][5])
+                    self.csocket.send(resposta.encode())
 
                 else:
                 	self.csocket.send("error".encode())
