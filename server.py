@@ -21,7 +21,7 @@ class ClientThread(threading.Thread):
             recebido = recebido.split(',')
             print(recebido)
             if recebido[0] == "cadastro":
-                if self.MYSQL.cadastrar_no_banco("2019",recebido[1],recebido[2],recebido[3]):
+                if self.MYSQL.cadastrar_no_banco(recebido[4],recebido[1],recebido[2],recebido[3]):
                     self.csocket.send("ok".encode())
                 else:
                     self.csocket.send("error".encode())
@@ -70,7 +70,8 @@ class ClientThread(threading.Thread):
                     self.csocket.send(resposta.encode())
 
             if recebido[0] == "editarTime":
-                print(recebido)
+                print("editarTime")
+                print("Receiver: ",recebido)
                 string_editar_time=""
                 string_editar_time+=recebido[2]+","+recebido[3]+","+recebido[4]+","+recebido[5]
 
@@ -78,6 +79,16 @@ class ClientThread(threading.Thread):
                     self.csocket.send("ok".encode())
                 else:
                     self.csocket.send("error".encode())
+
+            if recebido[0] == "editarProfessor":
+                print("editarProfessor")
+                print("Receiver: ",recebido)
+                if self.MYSQL.editarProfessor(recebido[1],recebido[2],recebido[3],recebido[4], recebido[5]):
+                    self.csocket.send("ok".encode())
+                else:
+                    self.csocket.send("error".encode())
+
+            
 
         """
         msg = data.decode()

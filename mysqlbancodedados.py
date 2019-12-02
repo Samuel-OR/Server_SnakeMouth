@@ -114,4 +114,19 @@ class MysqlBanco():
 		except:
 			print("Erro ao salvar no banco de dados!!!!!")
 
+
+	def editarProfessor(self,siape, nome, email, senha, id_t):
+		cursor = self.conexao.cursor()
+		#cursor.execute("UPDATE carros SET nome_dono = 'Joaquim' WHERE placa = 'ABC-1234'")
+		query = "UPDATE professor SET nome=%s,email=%s,senha=%s WHERE idprofessor=%s and siape=%s"
+		cadastrado = False
+
+		try:
+			cursor.execute(query,(nome,email,senha,id_t,siape))
+			self.conexao.commit()
+			print("OK, Salvo no banco de dados")
+			cadastrado = True
+		except:
+			print("Erro ao salvar no banco de dados!!!!!")
+
 		return cadastrado
