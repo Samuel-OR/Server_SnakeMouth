@@ -19,11 +19,11 @@ class MysqlBanco():
 			
 	def cadastrar_no_banco(self,siape,nome,email,senha):
 		cursor = self.conexao.cursor()
-		query = "INSERT INTO professor(siape,nome,email,senha) VALUES(%s,%s,%s,%s)"
+		query = "INSERT INTO professor(siape,nome,email,senha,exercicios) VALUES(%s,%s,%s,%s,%s)"
 		cadastrado = False
 
 		try:
-			cursor.execute(query,(siape,nome,email,senha))
+			cursor.execute(query,(siape,nome,email,senha,'0'))
 			self.conexao.commit()
 			print("OK, Salvo no banco de dados")
 			cadastrado = True
