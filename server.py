@@ -49,6 +49,13 @@ class ClientThread(threading.Thread):
                 else:
                     self.csocket.send("error".encode())
 
+            if recebido[0] == "cadastrarExer":
+                print("Receiver:", recebido)
+                if self.MYSQL.cadastrarExer(recebido[1],recebido[2],recebido[3],recebido[4],recebido[5],recebido[6]):
+                    self.csocket.send("ok".encode())
+                else:
+                    self.csocket.send("error".encode())
+
             if recebido[0] == "buscaTime":
                 status,time = self.MYSQL.busca_time_editar(recebido[1])
                 if status:

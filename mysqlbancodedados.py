@@ -49,6 +49,24 @@ class MysqlBanco():
 
 		return cadastrado
 
+	def cadastrarExer(self,nome,entrada,saida,describe,tempo,id_prof):
+
+		cursor = self.conexao.cursor()	
+		query = "INSERT INTO exercício(nome,arquivo_entrada,arquivo_saída,descrição,tempo,fk_id_professor) VALUES(%s,%s,%s,%s,%s,%s)"
+		cadastrado = False
+		print("Query:", query)
+		try:
+			#cursor.execute(query,(nome,entrada,saida,describe, tempo, id_prof))
+			cursor.execute(query,(nome,entrada,saida,describe,tempo,id_prof))
+			MysqlBanco.count+=1
+			self.conexao.commit()
+			print("OK, Salvo no banco de dados")
+			cadastrado = True
+		except:
+			print("Erro ao salvar no banco de dados!!!!!")
+
+		return cadastrado
+
 
 	def verifica_login(self,usuario,senha):
 		cursor = self.conexao.cursor()
@@ -56,23 +74,16 @@ class MysqlBanco():
 		cursor.execute(querySelect,(usuario,senha))
 		users = cursor.fetchall()
 
-
-		print("OI", users)
-
 		times = False
 		if len(users) > 0:
 			querySelect = "SELECT * FROM times_coders WHERE usuario=%s"
 			cursor.execute(querySelect,(str(users[0][0])))
-			print("----------")
 			print(users)
-			print("----------")
 			print(str(users[0][0]))
 			times = cursor.fetchall()
-			print("----------")
-			print(times)
+			#print(times)
 			times = len(times)
-			print("----------")
-			print(times)
+			#print(times)
 			return True, list(users), times
 		else:
 			return False, list(users), times
