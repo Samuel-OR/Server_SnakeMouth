@@ -1,4 +1,7 @@
 import pymysql
+import os
+import time
+
 
 class MysqlBanco():
 	count = 0
@@ -169,3 +172,22 @@ class MysqlBanco():
 			return True,list(time)
 		else:
 			return False,list(time)
+
+		
+
+	def cadastrarHist(self,nome,data,solucao,id_Time):
+
+		cursor = self.conexao.cursor()	
+		query = "INSERT INTO Histórico(problema,dataHora,resposta,fk_id_time) VALUES(%s,%s,%s,%s)"
+		cadastrado = False
+		
+		try:
+			#cursor.execute(query,(nome,entrada,saida,describe, tempo, id_prof))
+			cursor.execute(query,(nome,data,solucao,id_Time))
+			self.conexao.commit()
+			print("OK, Salvo no banco de dados")
+			cadastrado = True
+		except:
+			print("Erro ao salvar no banco de dados!!!!!")
+
+		return cadastrado

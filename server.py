@@ -25,6 +25,7 @@ class ClientThread(threading.Thread):
                     self.csocket.send("ok".encode())
                 else:
                     self.csocket.send("error".encode())
+            
             if recebido[0] == "login":
                 status,usuario,times =  self.MYSQL.verifica_login(recebido[1],recebido[2])
                 if status:
@@ -146,7 +147,14 @@ class ClientThread(threading.Thread):
                         resposta += str(x[4])
                     
                     self.csocket.send(resposta.encode())
-        
+            
+            if recebido[0] == "cadastrarHist":
+                print("Receiver:", recebido)
+                if self.MYSQL.cadastrarHist(recebido[1],recebido[2],recebido[3],recebido[4]):
+                    self.csocket.send("ok".encode())
+                else:
+                    self.csocket.send("error".encode())
+
         self.csocket.send("cad".encode())
         
 
