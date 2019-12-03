@@ -115,6 +115,36 @@ class ClientThread(threading.Thread):
                         resposta += str(x[4])+','
                         resposta += str(x[5])
                     
+                    self.csocket.send(resposta.encode()) 
+
+            if recebido[0] == "pegarExercicios":
+                status,time = self.MYSQL.pegarExercicios(recebido[1])
+
+                if status:
+                    resposta = str('okPegarExercicios')
+                    for x in time:
+                        resposta+=';'
+                        resposta += str(x[0])+','
+                        resposta += str(x[1])+','
+                        resposta += str(x[2])+','
+                        resposta += str(x[3])+','
+                        resposta += str(x[4])+','
+                        resposta += str(x[5])
+                    
+                    self.csocket.send(resposta.encode())
+
+            if recebido[0] == "atualizarHistorico":
+                status,time = self.MYSQL.pegarHistorico(recebido[1])
+                if status:
+                    resposta = str('okatualizarHistorico')
+                    for x in time:
+                        resposta+=';'
+                        resposta += str(x[0])+','
+                        resposta += str(x[1])+','
+                        resposta += str(x[2])+','
+                        resposta += str(x[3])+','
+                        resposta += str(x[4])
+                    
                     self.csocket.send(resposta.encode())
         
         self.csocket.send("cad".encode())

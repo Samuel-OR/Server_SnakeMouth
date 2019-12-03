@@ -149,3 +149,23 @@ class MysqlBanco():
 			return True,list(time)
 		else:
 			return False,list(time)
+
+	def pegarExercicios(self, idprofessor):
+		cursor = self.conexao.cursor()
+		querySelect = "SELECT * FROM exercício WHERE fk_id_professor=%s"
+		cursor.execute(querySelect,(idprofessor))
+		time = cursor.fetchall()
+		if len(time) > 0:
+			return True,list(time)
+		else:
+			return False,list(time)
+
+	def pegarHistorico(self, idTime):
+		cursor = self.conexao.cursor()
+		querySelect = "SELECT * FROM Histórico WHERE fk_id_time=%s"
+		cursor.execute(querySelect,(idTime))
+		time = cursor.fetchall()
+		if len(time) > 0:
+			return True,list(time)
+		else:
+			return False,list(time)
