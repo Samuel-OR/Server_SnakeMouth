@@ -13,7 +13,7 @@ os.system("nohup python3 {} < entradaPROF.txt > saidaAPRES.txt".format(nome))
 timeFIM = time.clock()
 
 print("TEMPO Segu: ", timeFIM- timeINI)
-print("TEMPO mili: ", (timeFIM- timeINI)*1000)
+print("TEMPO mili: ", (timeFIM- timeINI)*1000000)
 
 saidaAPRES = open('saidaAPRES.txt', 'r')
 saidaAPRES = (saidaAPRES.readlines())
