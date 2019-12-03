@@ -41,6 +41,21 @@ class ClientThread(threading.Thread):
                 else:
                 	self.csocket.send("error".encode())
 
+            if recebido[0] == "loginTime":
+                print("Login Time")
+                status,usuario =  self.MYSQL.verifica_loginTime(recebido[1],recebido[2])
+                if status:
+                    resposta = "okLogin,"
+                    resposta += str(usuario[0][0])+','
+                    resposta += str(usuario[0][1])+','
+                    resposta += str(usuario[0][2])+','
+                    resposta += str(usuario[0][3])+','
+                    resposta += str(usuario[0][4])+','
+                    resposta += str(usuario[0][5])
+                    self.csocket.send(resposta.encode())
+                else:
+                    self.csocket.send("error".encode())
+
             if recebido[0] == "cadastroTime":
                 string_cadastro_time=""
                 string_cadastro_time+=recebido[2]+","+recebido[3]+","+recebido[4]+","+recebido[5]
@@ -70,7 +85,6 @@ class ClientThread(threading.Thread):
                     self.csocket.send(resposta.encode())
 
             if recebido[0] == "editarTime":
-                print("editarTime")
                 print("Receiver: ",recebido)
                 string_editar_time=""
                 string_editar_time+=recebido[2]+","+recebido[3]+","+recebido[4]+","+recebido[5]
@@ -81,7 +95,6 @@ class ClientThread(threading.Thread):
                     self.csocket.send("error".encode())
 
             if recebido[0] == "editarProfessor":
-                print("editarProfessor")
                 print("Receiver: ",recebido)
                 if self.MYSQL.editarProfessor(recebido[1],recebido[2],recebido[3],recebido[4], recebido[5]):
                     self.csocket.send("ok".encode())
@@ -102,21 +115,8 @@ class ClientThread(threading.Thread):
                         resposta += str(x[4])+','
                         resposta += str(x[5])
                     
-                    print(resposta)        
                     self.csocket.send(resposta.encode())
-            
-
-        """
-        msg = data.decode()
-        print("REceiver: ", msg)
         
-        lista = msg.split(',')
-
-        user= lista[0]
-        password = lista[1]
-        name = lista[1]
-        """
-
         self.csocket.send("cad".encode())
         
 

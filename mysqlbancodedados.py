@@ -87,6 +87,17 @@ class MysqlBanco():
 		else:
 			return False, list(users), times
 
+	def verifica_loginTime(self,usuario,senha):
+		cursor = self.conexao.cursor()
+		querySelect = "SELECT * FROM times_coders WHERE nome_time=%s AND senha=%s"
+		cursor.execute(querySelect,(usuario,senha))
+		users = cursor.fetchall()
+		times = False
+		if len(users) > 0:
+			return True, list(users)
+		else:
+			return False, list(users)
+
 	def busca_time_editar(self,nome):
 		cursor = self.conexao.cursor()
 		querySelect = "SELECT * FROM times_coders WHERE nome_time=%s"
