@@ -60,7 +60,7 @@ class ClientThread(threading.Thread):
             if recebido[0] == "cadastroTime":
                 string_cadastro_time=""
                 string_cadastro_time+=recebido[2]+","+recebido[3]+","+recebido[4]+","+recebido[5]
-                if self.MYSQL.cadastrarTime(recebido[1],string_cadastro_time,recebido[6]): 
+                if self.MYSQL.cadastrarTime(recebido[1],string_cadastro_time,recebido[6], recebido[7]): 
                     self.csocket.send("ok".encode())
                 else:
                     self.csocket.send("error".encode())

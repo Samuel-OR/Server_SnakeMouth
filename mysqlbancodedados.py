@@ -35,14 +35,14 @@ class MysqlBanco():
 
 		return cadastrado
 
-	def cadastrarTime(self,nomeTime,membros,professor):
+	def cadastrarTime(self,nomeTime,membros,professor, senha):
 
 		cursor = self.conexao.cursor()
-		query = "INSERT INTO times_coders(nome_time,componentes_grupo,usuario, questoes_corretas) VALUES(%s,%s,%s, %s)"
+		query = "INSERT INTO times_coders(nome_time,componentes_grupo,usuario, questoes_corretas,senha) VALUES(%s,%s,%s, %s,%s)"
 		cadastrado = False
 
 		try:
-			cursor.execute(query,(nomeTime,membros,professor, '0'))
+			cursor.execute(query,(nomeTime,membros,professor, '0',senha))
 			MysqlBanco.count+=1
 			self.conexao.commit()
 			print("OK, Salvo no banco de dados")
